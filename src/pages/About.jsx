@@ -40,16 +40,16 @@ export default function About({ setActiveTab }) {
 
       {/* Selected Publications */}
       <h2 className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-gray-400 border-b border-border pb-1.5 mb-5">
-        Selected Publications
+        Selected Projects
       </h2>
 
       {selectedPubs.length === 0 && (
         <p className="text-sm text-gray-400">No publications yet.</p>
       )}
 
-      {selectedPubs.map((pub) => (
+      {/* {selectedPubs.map((pub) => (
         <PubCard key={pub.id} pub={pub} />
-      ))}
+      ))} */}
 
       {publications.length > 3 && (
         <div className="mt-5">
@@ -57,7 +57,7 @@ export default function About({ setActiveTab }) {
             className="text-sm text-accent hover:underline"
             onClick={() => setActiveTab("publications")}
           >
-            View all publications →
+            View all projects →
           </button>
         </div>
       )}

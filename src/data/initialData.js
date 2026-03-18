@@ -3,9 +3,9 @@ export const DEFAULT_DATA = {
     name: "Phon Sobon",
     initials: "PS",
     role: "Researcher & Developer",
-    avatar: null, // set to a URL string to show a photo
+    avatar: null,
     bio: [
-      `I am a researcher and developer passionate about machine learning, data science, and web technologies.
+      `I am a Junior AI Engineer and developer passionate about machine learning, data science, and web technologies.
        My work focuses on building intelligent systems that bridge the gap between research and real-world applications.
        I am currently affiliated with <a href="#" class="text-accent hover:underline">MPTC</a>, where I work on exciting projects.`,
       `Previously, I have contributed to various open-source projects and collaborated with interdisciplinary teams
@@ -129,16 +129,22 @@ export const DEFAULT_DATA = {
     education: [
       {
         id: "edu-1",
-        period: "2022 – present",
-        title: "M.Sc. Computer Science",
-        detail: "MPTC University · Advisor: Prof. Jane Doe",
+        period: "2026 – present",
+        title: "Professional Artificial Intelligence Certificate",
+        detail: "American University of Phnom Penh.Adjunct Lecturer:Dr.Rina Buoy ",
       },
       {
         id: "edu-2",
-        period: "2018 – 2022",
-        title: "B.Sc. Information Technology",
-        detail: "Royal University of Phnom Penh · Graduated with Distinction",
+        period: "2021 – 2025",
+        title: "B.Sc. Computer Science",
+        detail: "Royal University of Phnom Penh · Graduated with Great GPA",
       },
+      {
+        id: "edu-3",
+        period: "February 2023 - December 2023",
+        title: "Diploma in Software Development",
+        detail: "Phnom Penh International University · Graduated with Excellent GPA",
+      }
     ],
     experience: [
       {

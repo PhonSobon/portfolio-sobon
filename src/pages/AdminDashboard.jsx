@@ -3,7 +3,7 @@ import { useData } from "../context/DataContext";
 import { FormInput, FormTextarea, FormSelect, Button, ListItem } from "../components/forms/FormComponents";
 
 export default function AdminDashboard() {
-  const { data, updateMe, addPub, updatePub, deletePub, addPost, updatePost, deletePost, addOpenSourceProject, updateOpenSourceProject, deleteOpenSourceProject } = useData();
+  const { data, updateMe, addPub, updatePub, deletePub, addPost, updatePost, deletePost, addOpenSourceProject, updateOpenSourceProject, deleteOpenSourceProject, addCVItem, updateCVItem, deleteCVItem } = useData();
   const [tab, setTab] = useState("personal");
   const [editId, setEditId] = useState(null);
   
@@ -11,6 +11,8 @@ export default function AdminDashboard() {
   const [pub, setPub] = useState({ year: new Date().getFullYear(), title: "", authors: [], venue: "", badges: [], type: "conference", links: [], preview: null });
   const [post, setPost] = useState({ date: new Date().toISOString().split("T")[0], title: "", excerpt: "", tags: [], url: "#" });
   const [project, setProject] = useState({ title: "", description: "", stars: 0, language: "", link: "" });
+  const [education, setEducation] = useState({ period: "", title: "", detail: "" });
+  const [experience, setExperience] = useState({ period: "", title: "", detail: "" });
 
   // Personal handlers
   const savePersonal = () => {
@@ -73,15 +75,43 @@ export default function AdminDashboard() {
   const editProject = (p) => { setProject(p); setEditId(p.id); };
   const handleDeleteProject = (id) => { if (confirm("Delete?")) deleteOpenSourceProject(id); };
 
+  // Education handlers
+  const resetEducationForm = () => setEducation({ period: "", title: "", detail: "" });
+
+  const saveEducation = () => {
+    if (!education.title) return alert("Enter title");
+    editId ? updateCVItem("education", editId, education) : addCVItem("education", education);
+    alert(`✓ Education ${editId ? "updated" : "added"}`);
+    setEditId(null);
+    resetEducationForm();
+  };
+
+  const editEducation = (e) => { setEducation(e); setEditId(e.id); };
+  const handleDeleteEducation = (id) => { if (confirm("Delete?")) deleteCVItem("education", id); };
+
+  // Experience handlers
+  const resetExperienceForm = () => setExperience({ period: "", title: "", detail: "" });
+
+  const saveExperience = () => {
+    if (!experience.title) return alert("Enter title");
+    editId ? updateCVItem("experience", editId, experience) : addCVItem("experience", experience);
+    alert(`✓ Experience ${editId ? "updated" : "added"}`);
+    setEditId(null);
+    resetExperienceForm();
+  };
+
+  const editExperience = (e) => { setExperience(e); setEditId(e.id); };
+  const handleDeleteExperience = (id) => { if (confirm("Delete?")) deleteCVItem("experience", id); };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-10">
         <h1 className="font-garamond text-3xl font-bold mb-8">Admin Dashboard</h1>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-200">
-          {["personal", "publications", "blog", "open source"].map(t => (
-            <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 font-semibold border-b-2 ${tab === t ? "border-accent text-accent" : "border-transparent text-gray-600"}`}>
+        <div className="flex gap-4 mb-8 border-b border-gray-200 overflow-x-auto">
+          {["personal", "publications", "blog", "education", "experience", "open source"].map(t => (
+            <button key={t} onClick={() => { setTab(t); setEditId(null); }} className={`px-4 py-2 font-semibold border-b-2 whitespace-nowrap ${tab === t ? "border-accent text-accent" : "border-transparent text-gray-600"}`}>
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
@@ -242,6 +272,68 @@ export default function AdminDashboard() {
                   <ListItem key={p.id} title={p.title} subtitle={p.date} onEdit={() => editPost(p)} onDelete={() => handleDeletePost(p.id)} />
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* EDUCATION TAB */}
+        {tab === "education" && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg p-8 shadow">
+              <h2 className="text-2xl font-bold mb-6">{editId ? "Edit" : "Add"} Education</h2>
+
+              <FormInput label="Period" value={education.period} onChange={val => setEducation(e => ({ ...e, period: val }))} placeholder="e.g., 2021 – 2025" />
+              <FormInput label="Degree/Title" value={education.title} onChange={val => setEducation(e => ({ ...e, title: val }))} placeholder="e.g., B.Sc. Computer Science" />
+              <FormTextarea label="Details" value={education.detail} onChange={val => setEducation(e => ({ ...e, detail: val }))} rows="3" placeholder="Institution name, GPA, achievements, etc." />
+
+              <div className="flex gap-4">
+                <Button onClick={saveEducation}>{editId ? "Update" : "Add"} Education</Button>
+                {editId && <Button onClick={() => { setEditId(null); resetEducationForm(); }} variant="secondary">Cancel</Button>}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-8 shadow">
+              <h3 className="text-xl font-bold mb-4">Education ({data.cv?.education?.length || 0})</h3>
+              {data.cv?.education?.length === 0 ? (
+                <p className="text-sm text-gray-400">No education added yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {data.cv?.education?.map(e => (
+                    <ListItem key={e.id} title={e.title} subtitle={e.period} onEdit={() => editEducation(e)} onDelete={() => handleDeleteEducation(e.id)} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* EXPERIENCE TAB */}
+        {tab === "experience" && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg p-8 shadow">
+              <h2 className="text-2xl font-bold mb-6">{editId ? "Edit" : "Add"} Experience</h2>
+
+              <FormInput label="Period" value={experience.period} onChange={val => setExperience(e => ({ ...e, period: val }))} placeholder="e.g., 2023 – present" />
+              <FormInput label="Job Title" value={experience.title} onChange={val => setExperience(e => ({ ...e, title: val }))} placeholder="e.g., Research Assistant" />
+              <FormTextarea label="Details" value={experience.detail} onChange={val => setExperience(e => ({ ...e, detail: val }))} rows="3" placeholder="Company/Organization, responsibilities, achievements, etc." />
+
+              <div className="flex gap-4">
+                <Button onClick={saveExperience}>{editId ? "Update" : "Add"} Experience</Button>
+                {editId && <Button onClick={() => { setEditId(null); resetExperienceForm(); }} variant="secondary">Cancel</Button>}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-8 shadow">
+              <h3 className="text-xl font-bold mb-4">Experience ({data.cv?.experience?.length || 0})</h3>
+              {data.cv?.experience?.length === 0 ? (
+                <p className="text-sm text-gray-400">No experience added yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {data.cv?.experience?.map(e => (
+                    <ListItem key={e.id} title={e.title} subtitle={e.period} onEdit={() => editExperience(e)} onDelete={() => handleDeleteExperience(e.id)} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

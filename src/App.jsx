@@ -59,7 +59,7 @@ function About({ setTab }) {
       <hr className="border-border my-8" />
 
       <div className="text-xs font-semibold uppercase tracking-widest text-gray-600 border-b border-border pb-1 mb-6 mt-9">
-        Selected Publications
+        Selected Projects
       </div>
       <div>
         {selectedPubs.map((pub, i) => (
@@ -71,7 +71,7 @@ function About({ setTab }) {
           onClick={() => setTab("publications")}
           className="text-gray-600 hover:text-accent transition-colors text-sm"
         >
-          View all publications →
+          View all projects →
         </button>
       </div>
 
@@ -219,9 +219,6 @@ function OpenSourcePage() {
   );
 }
 
-// ─────────────────────────────────────────────
-//  APP COMPONENT
-// ─────────────────────────────────────────────
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("about");
